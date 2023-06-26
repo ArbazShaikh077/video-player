@@ -1,8 +1,8 @@
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:video_player/video_player.dart';
-import 'package:video_player_application/dependency_injection.dart';
-import 'package:video_player_application/video_handler.dart';
+import 'package:video_player_application/core/dependency_injection.dart';
+import 'package:video_player_application/domain/video_handler.dart';
 
 class VideoBloc extends Cubit<VideoPlayerController?> {
   VideoBloc() : super(null);

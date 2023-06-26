@@ -4,9 +4,9 @@ import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter_video_info/flutter_video_info.dart';
 import 'package:video_player/video_player.dart';
-import 'package:video_player_application/dependency_injection.dart';
-import 'package:video_player_application/duration_bloc.dart';
-import 'package:video_player_application/video_bloc.dart';
+import 'package:video_player_application/core/dependency_injection.dart';
+import 'package:video_player_application/feature/cubit/duration_bloc.dart';
+import 'package:video_player_application/feature/cubit/video_bloc.dart';
 
 class VideoHandler {
   /// Contains list of controller and duration as combine object

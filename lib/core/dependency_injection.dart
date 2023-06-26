@@ -1,7 +1,7 @@
 import 'package:get_it/get_it.dart';
-import 'package:video_player_application/duration_bloc.dart';
-import 'package:video_player_application/video_bloc.dart';
-import 'package:video_player_application/video_handler.dart';
+import 'package:video_player_application/feature/cubit/duration_bloc.dart';
+import 'package:video_player_application/feature/cubit/video_bloc.dart';
+import 'package:video_player_application/domain/video_handler.dart';
 
 final getIt = GetIt.instance;
 

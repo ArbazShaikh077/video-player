@@ -2,11 +2,11 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:video_player/video_player.dart';
-import 'package:video_player_application/dependency_injection.dart';
-import 'package:video_player_application/duration_bloc.dart';
-import 'package:video_player_application/slider_shape.dart';
-import 'package:video_player_application/video_bloc.dart';
-import 'package:video_player_application/video_handler.dart';
+import 'package:video_player_application/core/dependency_injection.dart';
+import 'package:video_player_application/feature/cubit/duration_bloc.dart';
+import 'package:video_player_application/core/utils/slider_shape.dart';
+import 'package:video_player_application/feature/cubit/video_bloc.dart';
+import 'package:video_player_application/domain/video_handler.dart';
 
 class VideoPlayers extends StatefulWidget {
   const VideoPlayers({super.key, required this.platformFile});
