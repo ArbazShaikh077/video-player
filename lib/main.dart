@@ -1,7 +1,7 @@
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:video_player_application/dependency_injection.dart';
-import 'package:video_player_application/video_player.dart';
+import 'package:video_player_application/core/dependency_injection.dart';
+import 'package:video_player_application/feature/ui/video_player.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
