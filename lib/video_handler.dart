@@ -27,11 +27,13 @@ class VideoHandler {
   /// Holds current time of the video in millisecond
   double currentPosition = 0;
 
-  /// Only contains list of video controller 
+  /// Only contains list of video controller
   List<VideoPlayerController> controllerList = [];
 
-  /// Only contains list of duration 
+  /// Only contains list of duration
   List<double> listOfDuration = [];
+
+  double currentTimer = 0;
 
   /// Used to initialize all video controller
   /// And start the first video
@@ -71,6 +73,8 @@ class VideoHandler {
     });
 
     currentPosition = 0.0;
+    currentTimer = 0.0;
+    durationBloc.clearDuration();
 
     /// Mark the first video controller as active for next time
     currentlyActiveControllerIndex = 0;
@@ -84,23 +88,36 @@ class VideoHandler {
     /// Initially start the play for the first video controller
     await listOfController[currentlyActiveControllerIndex].controller.play();
 
+    double totalDuration = 0.0;
+    for (var element in listOfController) {
+      totalDuration = totalDuration + element.duration;
+    }
+
     /// Check if only one video select then there is no need to play next video
     if (listOfController.length > 1) {
-
       /// Check every millisecond that the current video completes its duration or not
       /// If it's complete the duration then mark the next video controller as active and play the next video
-      
-      Timer.periodic(const Duration(milliseconds: 1), (timer) async {
+
+      videoTimeHandler =
+          Timer.periodic(const Duration(milliseconds: 1), (timer) async {
         currentPosition = currentPosition + 1;
-        if (listOfController.length > 1 && listOfController[currentlyActiveControllerIndex].duration ==
-            currentPosition) {
-          if (currentlyActiveControllerIndex < (listOfController.length - 1)) {
+        currentTimer = currentTimer + 1;
+        durationBloc.updateTheDuration(TimeHandler(
+          initialTime: 0.0,
+          endTime: totalDuration,
+          currentTime: currentTimer,
+        ));
+
+        if (listOfController.length > 1 &&
+            listOfController[currentlyActiveControllerIndex].duration ==
+                currentPosition) {
+          if (currentlyActiveControllerIndex != (listOfController.length - 1)) {
             currentlyActiveControllerIndex = currentlyActiveControllerIndex + 1;
             await listOfController[currentlyActiveControllerIndex]
                 .controller
                 .play();
 
-            /// Again initialize as 0 to play next video complete because currentPosition must holds value according to video not the sum of the video duration    
+            /// Again initialize as 0 to play next video complete because currentPosition must holds value according to video not the sum of the video duration
             currentPosition = 0;
             videoBloc.play(
                 listOfController[currentlyActiveControllerIndex].controller);
@@ -112,13 +129,23 @@ class VideoHandler {
         }
       });
     }
+    listOfController[currentlyActiveControllerIndex].controller.addListener(() async{ 
+      int time = (await listOfController[currentlyActiveControllerIndex].controller.position)?.inMilliseconds ?? 0;
+      durationBloc.updateTheDuration(TimeHandler(initialTime: 0.0, endTime: totalDuration, currentTime: time.toDouble()));
+    });
 
     videoBloc.play(listOfController[currentlyActiveControllerIndex].controller);
-    double totalDuration = 0.0;
-    for (var element in listOfController) {
-      totalDuration = totalDuration + element.duration;
+  }
+
+  void seekTo(double seconds)async{
+
+    /// Handle the seek controller for single videos
+    if(listOfController.length < 2){
+      await listOfController[currentlyActiveControllerIndex].controller.seekTo(Duration(seconds:seconds.toInt()));
     }
-    durationBloc.updateTheDuration(totalDuration);
+    else{
+      // Todo : Handle multiple videos seek controller
+    }
   }
 }
 
@@ -127,4 +154,15 @@ class ControllerWithDuration {
   final double duration;
 
   ControllerWithDuration({required this.controller, required this.duration});
+}
+
+class TimeHandler {
+  final double initialTime;
+  final double endTime;
+  final double currentTime;
+
+  TimeHandler(
+      {required this.initialTime,
+      required this.endTime,
+      required this.currentTime});
 }
